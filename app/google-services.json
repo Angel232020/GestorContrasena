@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "684161296163",
+    "project_id": "vault-f5233",
+    "storage_bucket": "vault-f5233.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:684161296163:android:03a1c1ac92aa5403278e96",
+        "android_client_info": {
+          "package_name": "com.example.gestorcontrasena"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "684161296163-fklouv06rb4k4eefak37dsrnr3ee0ljv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gestorcontrasena",
+            "certificate_hash": "86c9df5d38c8f4a07d277df63ff883fd730a5109"
+          }
+        },
+        {
+          "client_id": "684161296163-fukbsg8cllv1nqa4ffkaatktpdj928of.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIN86bkM78jgrfD-Ht9gQyuKHlsnzeOgU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "684161296163-fukbsg8cllv1nqa4ffkaatktpdj928of.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_gradient"
+    android:scrollbars="none">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- HEADER -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                app:cardCornerRadius="28dp"
+                app:cardBackgroundColor="#F4FBFC"
+                app:strokeColor="#D7ECEF"
+                app:strokeWidth="1dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="14dp"
+                    android:src="@drawable/ic_user"
+                    app:tint="#1F7A8C" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="14dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txtSaludo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hola "
+                    android:textStyle="bold"
+                    android:textSize="22sp"
+                    android:textColor="#12343B" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bienvenido nuevamente"
+                    android:textColor="#6B8790"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- TITULO -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Menú principal"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="#12343B"
+            android:layout_marginTop="34dp"
+            android:layout_marginBottom="20dp" />
+
+        <!-- GRID -->
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2">
+
+            <!-- CUENTAS -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btnCuentas"
+                android:layout_width="0dp"
+                android:layout_height="170dp"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp"
+                app:cardCornerRadius="26dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:strokeColor="#D7ECEF"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:src="@drawable/ic_user"
+                        app:tint="#1F7A8C" />
+
+                    <TextView
+                        android:text="Cuentas"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="#12343B"
+                        android:layout_marginTop="12dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- TARJETAS -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btnTarjetas"
+                android:layout_width="0dp"
+                android:layout_height="170dp"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp"
+                app:cardCornerRadius="26dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:strokeColor="#D7ECEF"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:src="@drawable/ic_credit_card"
+                        app:tint="#1F7A8C" />
+
+                    <TextView
+                        android:text="Tarjetas"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="#12343B"
+                        android:layout_marginTop="12dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- CONTRASEÑAS -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btnPasswords"
+                android:layout_width="0dp"
+                android:layout_height="170dp"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp"
+                app:cardCornerRadius="26dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:strokeColor="#D7ECEF"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:src="@drawable/ic_lock"
+                        app:tint="#1F7A8C" />
+
+                    <TextView
+                        android:text="Contraseñas"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="#12343B"
+                        android:layout_marginTop="12dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- DOCUMENTOS -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btnDocumentos"
+                android:layout_width="0dp"
+                android:layout_height="170dp"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp"
+                app:cardCornerRadius="26dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:strokeColor="#D7ECEF"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:src="@drawable/ic_document"
+                        app:tint="#1F7A8C" />
+
+                    <TextView
+                        android:text="Documentos"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="#12343B"
+                        android:layout_marginTop="12dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </GridLayout>
+
+        <!-- BOTON -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCerrarSesion"
+            android:layout_width="match_parent"
+            android:layout_height="58dp"
+            android:layout_marginTop="28dp"
+            android:text="Cerrar sesión"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:textColor="@android:color/white"
+            android:backgroundTint="#1F7A8C"
+            app:cornerRadius="18dp" />
+
+    </LinearLayout>
+
+</ScrollView>
