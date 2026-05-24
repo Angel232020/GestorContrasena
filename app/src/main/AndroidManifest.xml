@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <!-- 🔐 PERMISOS AQUÍ (FUERA DE APPLICATION) -->
+
+    <!-- 🔐 PERMISOS -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
@@ -15,36 +16,59 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GestorContrasena">
-        <activity
-            android:name=".Documentos"
-            android:exported="false" />
-        <activity
-            android:name=".Contrasenas"
-            android:exported="false" />
-        <activity
-            android:name=".Otp"
-            android:exported="false" />
-        <activity
-            android:name=".tarjetas"
-            android:exported="false" />
-        <activity
-            android:name=".cuentas"
-            android:exported="false" />
-        <activity
-            android:name=".register"
-            android:exported="false" />
-        <activity
-            android:name=".Dashboard"
-            android:exported="false" />
+
+        <!-- 🔹 LOGIN PRINCIPAL -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- 🔹 PANTALLA PRINCIPAL -->
+        <activity
+            android:name=".Dashboard"
+            android:exported="false" />
+
+        <!-- 🔹 REGISTRO -->
+        <activity
+            android:name=".register"
+            android:exported="false" />
+
+        <!-- 🔹 CUENTAS -->
+        <activity
+            android:name=".cuentas"
+            android:exported="false" />
+
+        <!-- 🔹 AGREGAR CUENTA -->
+        <activity
+            android:name=".Agregar_Cuenta"
+            android:exported="false" />
+
+        <!-- 🔹 EDITAR CUENTA (IMPORTANTE) -->
+        <activity
+            android:name=".EditarCuenta"
+            android:exported="false" />
+
+        <!-- 🔹 OTROS MÓDULOS -->
+        <activity
+            android:name=".Contrasenas"
+            android:exported="false" />
+
+        <activity
+            android:name=".Documentos"
+            android:exported="false" />
+
+        <activity
+            android:name=".Otp"
+            android:exported="false" />
+
+        <activity
+            android:name=".tarjetas"
+            android:exported="false" />
+
     </application>
 
 </manifest>

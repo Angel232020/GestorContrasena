@@ -26,6 +26,8 @@ public class register extends AppCompatActivity {
     TextInputEditText txtTelefono;
     TextInputEditText txtPass;
 
+    TextInputEditText txtMasterKey;
+
     MaterialButton btnCrearCuenta;
 
     TextView txtVolverLogin;
@@ -46,6 +48,7 @@ public class register extends AppCompatActivity {
         txtCorreo = findViewById(R.id.txtCorreo);
         txtTelefono = findViewById(R.id.txtTelefono);
         txtPass = findViewById(R.id.txtPass);
+        txtMasterKey = findViewById(R.id.txtMasterKey);
 
         btnCrearCuenta = findViewById(R.id.btnCrearCuenta);
 
@@ -80,6 +83,8 @@ public class register extends AppCompatActivity {
 
         String password =
                 txtPass.getText().toString().trim();
+        String masterkey =
+                txtMasterKey.getText().toString().trim();
 
         // ✅ VALIDAR CAMPOS
         if (nombre.isEmpty()
@@ -169,6 +174,7 @@ public class register extends AppCompatActivity {
                     data.put("nombre", nombre);
                     data.put("email", correo);
                     data.put("telefono", telefono);
+                    data.put("masterKey", masterkey);
 
                     // 🔥 GUARDAR EN FIRESTORE
                     FirebaseFirestore.getInstance()

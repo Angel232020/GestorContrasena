@@ -2,12 +2,14 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="24dp"
+    android:padding="20dp"
     android:background="@drawable/bg_gradient">
 
+    <!-- TITULO -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -17,38 +19,21 @@
         android:textColor="#12343B"
         android:layout_marginBottom="20dp"/>
 
-    <!-- CARD -->
-    <com.google.android.material.card.MaterialCardView
+    <!-- BOTON AGREGAR -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnAgregarCuenta"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="18dp"
-        app:cardCornerRadius="24dp"
-        app:cardBackgroundColor="#FFFFFF"
-        app:strokeColor="#D7ECEF">
+        android:text="Agregar Cuenta"
+        android:textColor="@android:color/white"
+        android:backgroundTint="#1F7A8C"
+        app:cornerRadius="18dp"
+        android:layout_marginBottom="20dp"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="20dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Netflix"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:textColor="#12343B"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="miguel@email.com"
-                android:textColor="#6B8790"
-                android:layout_marginTop="6dp"/>
-
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
+    <!-- LISTA -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerCuentas"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </LinearLayout>
