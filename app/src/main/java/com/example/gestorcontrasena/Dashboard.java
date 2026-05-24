@@ -2,7 +2,6 @@ package com.example.gestorcontrasena;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,19 +13,26 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Dashboard extends AppCompatActivity {
 
+    // 🔗 COMPONENTES
     MaterialButton btnCerrarSesion;
 
-    MaterialCardView btnCuentas, btnTarjetas, btnPasswords, btnDocumentos;
+    MaterialCardView btnCuentas;
+    MaterialCardView btnTarjetas;
+    MaterialCardView btnPasswords;
+    MaterialCardView btnDocumentos;
 
     TextView txtSaludo;
 
+    // 🔥 FIREBASE
     FirebaseAuth mAuth;
+
     FirebaseFirestore db;
 
     @Override
@@ -34,46 +40,88 @@ public class Dashboard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         EdgeToEdge.enable(this);
+
         setContentView(R.layout.activity_dashboard);
 
+        // 🔥 FIREBASE
         mAuth = FirebaseAuth.getInstance();
+
         db = FirebaseFirestore.getInstance();
 
-        // 🔥 TEXTVIEW SALUDO
+        // 🔗 XML
         txtSaludo = findViewById(R.id.txtSaludo);
 
+        btnCerrarSesion =
+                findViewById(R.id.btnCerrarSesion);
+
+        btnCuentas =
+                findViewById(R.id.btnCuentas);
+
+        btnTarjetas =
+                findViewById(R.id.btnTarjetas);
+
+        btnPasswords =
+                findViewById(R.id.btnPasswords);
+
+        btnDocumentos =
+                findViewById(R.id.btnDocumentos);
+
+        // 🔥 CARGAR NOMBRE
         cargarNombre();
 
-        // BOTÓN LOGOUT
-        btnCerrarSesion = findViewById(R.id.btnCerrarSesion);
-        btnCerrarSesion.setOnClickListener(v -> cerrarSesion());
+        // 🔒 LOGOUT
+        btnCerrarSesion.setOnClickListener(v ->
+                cerrarSesion());
 
-        // MENÚ
-        btnCuentas = findViewById(R.id.btnCuentas);
-        btnTarjetas = findViewById(R.id.btnTarjetas);
-        btnPasswords = findViewById(R.id.btnPasswords);
-        btnDocumentos = findViewById(R.id.btnDocumentos);
+        // 📁 CUENTAS
+        btnCuentas.setOnClickListener(v -> {
 
-        btnCuentas.setOnClickListener(v ->
-                startActivity(new Intent(this, cuentas.class)));
+            Intent intent =
+                    new Intent(Dashboard.this,
+                            cuentas.class);
 
-        btnTarjetas.setOnClickListener(v ->
-                startActivity(new Intent(this, tarjetas.class)));
+            startActivity(intent);
+        });
 
-        btnPasswords.setOnClickListener(v ->
-                startActivity(new Intent(this, Contrasenas.class)));
+        // 💳 TARJETAS
+        btnTarjetas.setOnClickListener(v -> {
 
-        btnDocumentos.setOnClickListener(v ->
-                startActivity(new Intent(this, Documentos.class)));
+            Intent intent =
+                    new Intent(Dashboard.this,
+                            tarjetas.class);
 
-        // EDGE TO EDGE
+            startActivity(intent);
+        });
+
+        // 🔑 PASSWORDS
+        btnPasswords.setOnClickListener(v -> {
+
+            Intent intent =
+                    new Intent(Dashboard.this,
+                            Contrasenas.class);
+
+            startActivity(intent);
+        });
+
+        // 📄 DOCUMENTOS
+        btnDocumentos.setOnClickListener(v -> {
+
+            Intent intent =
+                    new Intent(Dashboard.this,
+                            Documentos.class);
+
+            startActivity(intent);
+        });
+
+        // 🔥 EDGE TO EDGE
         ViewCompat.setOnApplyWindowInsetsListener(
                 findViewById(android.R.id.content),
                 (v, insets) -> {
 
-                    Insets systemBars = insets.getInsets(
-                            WindowInsetsCompat.Type.systemBars()
-                    );
+                    Insets systemBars =
+                            insets.getInsets(
+                                    WindowInsetsCompat.Type.systemBars()
+                            );
 
                     v.setPadding(
                             systemBars.left,
@@ -90,57 +138,92 @@ public class Dashboard extends AppCompatActivity {
     // 🔥 CARGAR NOMBRE DESDE FIRESTORE
     private void cargarNombre() {
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser user =
+                FirebaseAuth.getInstance()
+                        .getCurrentUser();
 
+        // ❌ SIN SESIÓN
         if (user == null) {
+
             txtSaludo.setText("Hola Usuario");
+
             return;
         }
 
+        // 🔥 UID
         String uid = user.getUid();
 
-        FirebaseFirestore.getInstance()
-                .collection("usuarios")
+        // 🔥 FIRESTORE
+        db.collection("usuarios")
                 .document(uid)
                 .get()
                 .addOnSuccessListener(document -> {
 
+                    // ✅ EXISTE
                     if (document.exists()) {
 
-                        String nombre = document.getString("nombre");
+                        String nombre =
+                                document.getString("nombre");
 
-                        // 🔥 DEBUG IMPORTANTE
-                        if (nombre == null || nombre.trim().isEmpty()) {
-                            txtSaludo.setText("Hola Usuario");
+                        // ✅ VALIDAR NOMBRE
+                        if (nombre != null
+                                && !nombre.trim().isEmpty()) {
+
+                            txtSaludo.setText(
+                                    "Hola " + nombre
+                            );
+
                         } else {
-                            txtSaludo.setText("Hola " + nombre);
+
+                            txtSaludo.setText(
+                                    "Hola Usuario"
+                            );
                         }
 
                     } else {
-                        txtSaludo.setText("Hola Usuario");
-                    }
 
+                        txtSaludo.setText(
+                                "Hola Usuario"
+                        );
+                    }
                 })
                 .addOnFailureListener(e -> {
-                    txtSaludo.setText("Hola Usuario");
+
+                    txtSaludo.setText(
+                            "Hola Usuario"
+                    );
                 });
-        Log.d("UID_DEBUG", "UID: " + uid);
-        Toast.makeText(this, uid, Toast.LENGTH_LONG).show();
     }
 
-    // 🔥 LOGOUT
+    // 🔒 CERRAR SESIÓN
     private void cerrarSesion() {
 
-        mAuth.signOut();
+        // 🔥 LOGOUT FIREBASE
+        FirebaseAuth.getInstance().signOut();
 
         Toast.makeText(this,
                 "Sesión cerrada",
                 Toast.LENGTH_SHORT).show();
 
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        // 🔄 LIMPIAR STACK
+        Intent intent =
+                new Intent(Dashboard.this,
+                        MainActivity.class);
+
+        intent.addFlags(
+                Intent.FLAG_ACTIVITY_NEW_TASK
+                        | Intent.FLAG_ACTIVITY_CLEAR_TASK
+        );
 
         startActivity(intent);
+
         finish();
+    }
+
+    // 🔙 BLOQUEAR VOLVER
+    @Override
+    public void onBackPressed() {
+
+        moveTaskToBack(true);
     }
 }

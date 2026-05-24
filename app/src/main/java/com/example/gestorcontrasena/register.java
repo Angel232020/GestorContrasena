@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -19,10 +20,17 @@ import java.util.Map;
 
 public class register extends AppCompatActivity {
 
-    TextInputEditText txtNombre, txtCorreo, txtTelefono, txtPass;
+    // COMPONENTES
+    TextInputEditText txtNombre;
+    TextInputEditText txtCorreo;
+    TextInputEditText txtTelefono;
+    TextInputEditText txtPass;
+
     MaterialButton btnCrearCuenta;
+
     TextView txtVolverLogin;
 
+    // FIREBASE
     FirebaseAuth mAuth;
 
     @Override
@@ -30,94 +38,176 @@ public class register extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        // 🔥 FIREBASE
         mAuth = FirebaseAuth.getInstance();
 
+        // 🔗 VINCULAR COMPONENTES XML
         txtNombre = findViewById(R.id.txtNombre);
         txtCorreo = findViewById(R.id.txtCorreo);
         txtTelefono = findViewById(R.id.txtTelefono);
         txtPass = findViewById(R.id.txtPass);
 
         btnCrearCuenta = findViewById(R.id.btnCrearCuenta);
+
         txtVolverLogin = findViewById(R.id.txtVolverLogin);
 
+        // 🔘 BOTÓN REGISTRO
         btnCrearCuenta.setOnClickListener(v -> registrarUsuario());
 
-        //BOTÓN VOLVER AL LOGIN
+        // 🔙 VOLVER LOGIN
         txtVolverLogin.setOnClickListener(v -> {
-            Intent intent = new Intent(register.this, MainActivity.class);
+
+            Intent intent =
+                    new Intent(register.this,
+                            MainActivity.class);
+
             startActivity(intent);
             finish();
         });
     }
 
+    // 🔥 REGISTRAR USUARIO
     private void registrarUsuario() {
 
-        String nombre = txtNombre.getText().toString().trim();
-        String correo = txtCorreo.getText().toString().trim();
-        String telefono = txtTelefono.getText().toString().trim();
-        String password = txtPass.getText().toString().trim();
+        String nombre =
+                txtNombre.getText().toString().trim();
 
-        if (nombre.isEmpty() || correo.isEmpty() || telefono.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show();
+        String correo =
+                txtCorreo.getText().toString().trim();
+
+        String telefono =
+                txtTelefono.getText().toString().trim();
+
+        String password =
+                txtPass.getText().toString().trim();
+
+        // ✅ VALIDAR CAMPOS
+        if (nombre.isEmpty()
+                || correo.isEmpty()
+                || telefono.isEmpty()
+                || password.isEmpty()) {
+
+            Toast.makeText(this,
+                    "Completa todos los campos",
+                    Toast.LENGTH_SHORT).show();
+
             return;
         }
 
+        // ✅ VALIDAR EMAIL
         if (!Patterns.EMAIL_ADDRESS.matcher(correo).matches()) {
-            Toast.makeText(this, "Correo inválido", Toast.LENGTH_SHORT).show();
+
+            Toast.makeText(this,
+                    "Correo inválido",
+                    Toast.LENGTH_SHORT).show();
+
             return;
         }
 
-        if (!telefono.startsWith("+")) {
-            Toast.makeText(this, "Teléfono debe iniciar con +503", Toast.LENGTH_SHORT).show();
+        // ✅ VALIDAR TELÉFONO
+        if (!telefono.matches("^\\+[0-9]{8,15}$")) {
+
+            Toast.makeText(this,
+                    "Número inválido. Ejemplo: +50370000000",
+                    Toast.LENGTH_LONG).show();
+
             return;
         }
 
+        // ✅ VALIDAR PASSWORD
         if (password.length() < 6) {
-            Toast.makeText(this, "Mínimo 6 caracteres", Toast.LENGTH_SHORT).show();
+
+            Toast.makeText(this,
+                    "La contraseña debe tener mínimo 6 caracteres",
+                    Toast.LENGTH_LONG).show();
+
             return;
         }
 
+        // 🔒 DESHABILITAR BOTÓN
         btnCrearCuenta.setEnabled(false);
         btnCrearCuenta.setText("Creando...");
 
+        // 🔥 CREAR USUARIO FIREBASE
         mAuth.createUserWithEmailAndPassword(correo, password)
                 .addOnCompleteListener(task -> {
 
+                    // ❌ ERROR
                     if (!task.isSuccessful()) {
+
                         btnCrearCuenta.setEnabled(true);
                         btnCrearCuenta.setText("Crear cuenta");
 
                         Toast.makeText(this,
-                                "ERROR: " + task.getException().getMessage(),
+                                "Error: " +
+                                        task.getException().getMessage(),
                                 Toast.LENGTH_LONG).show();
+
                         return;
                     }
 
-                    FirebaseUser user = mAuth.getCurrentUser();
+                    // ✅ USUARIO CREADO
+                    FirebaseUser user =
+                            mAuth.getCurrentUser();
 
-                    if (user == null) return;
+                    if (user == null) {
+
+                        Toast.makeText(this,
+                                "Error inesperado",
+                                Toast.LENGTH_LONG).show();
+
+                        return;
+                    }
 
                     String uid = user.getUid();
 
-                    Map<String, Object> data = new HashMap<>();
+                    // 📦 DATOS FIRESTORE
+                    Map<String, Object> data =
+                            new HashMap<>();
+
+                    data.put("uid", uid);
                     data.put("nombre", nombre);
                     data.put("email", correo);
                     data.put("telefono", telefono);
 
+                    // 🔥 GUARDAR EN FIRESTORE
                     FirebaseFirestore.getInstance()
                             .collection("usuarios")
                             .document(uid)
                             .set(data)
-                            .addOnSuccessListener(aVoid -> {
+                            .addOnSuccessListener(unused -> {
 
-                                Toast.makeText(this,
-                                        "Usuario creado",
-                                        Toast.LENGTH_SHORT).show();
+                                // 📧 ENVIAR VERIFICACIÓN
+                                user.sendEmailVerification()
+                                        .addOnCompleteListener(emailTask -> {
 
-                                //IR AL LOGIN
-                                Intent intent = new Intent(register.this, MainActivity.class);
-                                startActivity(intent);
-                                finish();
+                                            btnCrearCuenta.setEnabled(true);
+                                            btnCrearCuenta.setText("Crear cuenta");
+
+                                            if (emailTask.isSuccessful()) {
+
+                                                Toast.makeText(this,
+                                                        "Cuenta creada.\nVerifica tu correo.",
+                                                        Toast.LENGTH_LONG).show();
+
+                                                // 🔒 CERRAR SESIÓN
+                                                mAuth.signOut();
+
+                                                // 🔙 LOGIN
+                                                Intent intent =
+                                                        new Intent(register.this,
+                                                                MainActivity.class);
+
+                                                startActivity(intent);
+                                                finish();
+
+                                            } else {
+
+                                                Toast.makeText(this,
+                                                        "No se pudo enviar el correo",
+                                                        Toast.LENGTH_LONG).show();
+                                            }
+                                        });
                             })
                             .addOnFailureListener(e -> {
 
@@ -125,7 +215,8 @@ public class register extends AppCompatActivity {
                                 btnCrearCuenta.setText("Crear cuenta");
 
                                 Toast.makeText(this,
-                                        "Error Firestore: " + e.getMessage(),
+                                        "Error Firestore: " +
+                                                e.getMessage(),
                                         Toast.LENGTH_LONG).show();
                             });
                 });

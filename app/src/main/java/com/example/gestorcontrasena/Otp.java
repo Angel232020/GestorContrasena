@@ -8,17 +8,21 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 
 public class Otp extends AppCompatActivity {
 
+    // COMPONENTES
     TextInputEditText txtOtp;
     MaterialButton btnVerificar;
 
+    // FIREBASE
     FirebaseAuth mAuth;
 
+    // OTP
     String verificationId;
 
     @Override
@@ -26,62 +30,100 @@ public class Otp extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_otp);
 
+        // 🔥 FIREBASE
         mAuth = FirebaseAuth.getInstance();
 
+        // 🔗 XML
         txtOtp = findViewById(R.id.txtOtp);
         btnVerificar = findViewById(R.id.btnVerificar);
 
-        // 🔐 recibir verificationId desde MainActivity
-        verificationId = getIntent().getStringExtra("verificationId");
+        // 🔐 RECIBIR verificationId
+        verificationId =
+                getIntent().getStringExtra("verificationId");
 
+        // 🔘 BOTÓN
         btnVerificar.setOnClickListener(v -> verificarCodigo());
     }
 
     // 🔥 VERIFICAR OTP
     private void verificarCodigo() {
 
-        String code = txtOtp.getText().toString().trim();
+        String code =
+                txtOtp.getText().toString().trim();
 
-        // ⚠️ VALIDACIONES
+        // ✅ VALIDAR OTP
         if (code.isEmpty()) {
+
             Toast.makeText(this,
                     "Ingresa el código OTP",
                     Toast.LENGTH_SHORT).show();
+
             return;
         }
 
-        if (verificationId == null || verificationId.isEmpty()) {
+        // ✅ VALIDAR verificationId
+        if (verificationId == null
+                || verificationId.isEmpty()) {
+
             Toast.makeText(this,
                     "Error de verificación",
                     Toast.LENGTH_SHORT).show();
+
             return;
         }
 
-        // 🔐 CREAR CREDENCIAL OTP
-        PhoneAuthCredential credential =
-                PhoneAuthProvider.getCredential(verificationId, code);
+        // 🔒 DESHABILITAR BOTÓN
+        btnVerificar.setEnabled(false);
+        btnVerificar.setText("Verificando...");
 
-        // 🔐 VALIDAR OTP
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(task -> {
+        try {
 
-                    if (task.isSuccessful()) {
+            // 🔐 CREAR CREDENTIAL
+            PhoneAuthCredential credential =
+                    PhoneAuthProvider.getCredential(
+                            verificationId,
+                            code
+                    );
 
+            // 🔥 VALIDAR OTP CON FIREBASE
+            mAuth.signInWithCredential(credential)
+                    .addOnCompleteListener(task -> {
+
+                        // ❌ ERROR
+                        if (!task.isSuccessful()) {
+
+                            btnVerificar.setEnabled(true);
+                            btnVerificar.setText("Verificar");
+
+                            Toast.makeText(this,
+                                    "Código incorrecto",
+                                    Toast.LENGTH_LONG).show();
+
+                            return;
+                        }
+
+                        // ✅ OTP CORRECTO
                         Toast.makeText(this,
-                                "Acceso autorizado",
+                                "OTP verificado",
                                 Toast.LENGTH_SHORT).show();
 
-                        // 👉 IR AL DASHBOARD
-                        Intent intent = new Intent(Otp.this, Dashboard.class);
+                        // 👉 DASHBOARD
+                        Intent intent =
+                                new Intent(Otp.this,
+                                        Dashboard.class);
+
                         startActivity(intent);
                         finish();
+                    });
 
-                    } else {
+        } catch (Exception e) {
 
-                        Toast.makeText(this,
-                                "Código incorrecto o expirado",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
+            btnVerificar.setEnabled(true);
+            btnVerificar.setText("Verificar");
+
+            Toast.makeText(this,
+                    "Código inválido o expirado",
+                    Toast.LENGTH_LONG).show();
+        }
     }
 }
